@@ -12,8 +12,17 @@ function fictional_university_assets() {
 add_action( 'wp_enqueue_scripts', 'fictional_university_assets' );
 
 function fictional_university_setup() {
-    add_theme_support( 'title-tag' );
-    add_theme_support( 'post-thumbnails' );
-    add_image_size( 'fictional-university-featured-image', 2000, 1200, true );
+	add_theme_support( 'title-tag' );
+	add_theme_support( 'post-thumbnails' );
+	add_image_size( 'fictional-university-featured-image', 2000, 1200, true );
+
+	register_nav_menus(
+		array(
+			'primary_menu' => __( 'Primary Menu', 'fictional-university' ),
+			'footer_one'   => __( 'Footer Menu One', 'fictional-university' ),
+			'footer_two'   => __( 'Footer Menu Two', 'fictional-university' ),
+		)
+	);
 }
+
 add_action( 'after_setup_theme', 'fictional_university_setup' );
