@@ -120,6 +120,22 @@ function fictional_university_custom_post_type() {
 		'supports'           => array( 'title', 'editor', 'author', 'thumbnail' ),
 	);
 	register_post_type( 'program', $program_args );
+
+	// Professor Custom Post Type
+	register_post_type(
+		'professor',
+		array(
+			'labels'       => array(
+				'name'          => 'Professors',
+				'singular_name' => 'Professor',
+			),
+			'public'       => true,
+			'show_in_rest' => true,
+			'hierarchical' => true,
+			'menu_icon'    => 'dashicons-welcome-learn-more',
+			'supports'     => array( 'title', 'editor', 'author', 'thumbnail' ),
+		),
+	);
 }
 
 add_action( 'init', 'fictional_university_custom_post_type' );
