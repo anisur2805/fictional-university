@@ -76,6 +76,50 @@ function fictional_university_custom_post_type() {
 	);
 
 	register_post_type( 'event', $args );
+
+	// Program Custom Post Type
+	$program_labels = array(
+		'name'                  => _x( 'Programs', 'Post type general name', 'fictional-university' ),
+		'singular_name'         => _x( 'Program', 'Post type singular name', 'fictional-university' ),
+		'menu_name'             => _x( 'Programs', 'Admin Menu text', 'fictional-university' ),
+		'name_admin_bar'        => _x( 'Program', 'Add New on Toolbar', 'fictional-university' ),
+		'add_new'               => __( 'Add New', 'fictional-university' ),
+		'add_new_item'          => __( 'Add New Program', 'fictional-university' ),
+		'new_item'              => __( 'New Program', 'fictional-university' ),
+		'edit_item'             => __( 'Edit Program', 'fictional-university' ),
+		'view_item'             => __( 'View Program', 'fictional-university' ),
+		'all_items'             => __( 'All Programs', 'fictional-university' ),
+		'search_items'          => __( 'Search Programs', 'fictional-university' ),
+		'parent_item_colon'     => __( 'Parent Programs:', 'fictional-university' ),
+		'not_found'             => __( 'No books found.', 'fictional-university' ),
+		'not_found_in_trash'    => __( 'No books found in Trash.', 'fictional-university' ),
+		'featured_image'        => _x( 'Program Cover Image', 'Overrides the “Featured Image” phrase for this post type. Added in 4.3', 'fictional-university' ),
+		'set_featured_image'    => _x( 'Set cover image', 'Overrides the “Set featured image” phrase for this post type. Added in 4.3', 'fictional-university' ),
+		'remove_featured_image' => _x( 'Remove cover image', 'Overrides the “Remove featured image” phrase for this post type. Added in 4.3', 'fictional-university' ),
+		'use_featured_image'    => _x( 'Use as cover image', 'Overrides the “Use as featured image” phrase for this post type. Added in 4.3', 'fictional-university' ),
+		'archives'              => _x( 'Program archives', 'The post type archive label used in nav menus. Default “Post Archives”. Added in 4.4', 'fictional-university' ),
+		'insert_into_item'      => _x( 'Insert into program', 'Overrides the “Insert into post”/”Insert into page” phrase (used when inserting media into a post). Added in 4.4', 'fictional-university' ),
+		'uploaded_to_this_item' => _x( 'Uploaded to this program', 'Overrides the “Uploaded to this post”/”Uploaded to this page” phrase (used when viewing media attached to a post). Added in 4.4', 'fictional-university' ),
+		'filter_items_list'     => _x( 'Filter books list', 'Screen reader text for the filter links heading on the post type listing screen. Default “Filter posts list”/”Filter pages list”. Added in 4.4', 'fictional-university' ),
+		'items_list_navigation' => _x( 'Programs list navigation', 'Screen reader text for the pagination heading on the post type listing screen. Default “Posts list navigation”/”Pages list navigation”. Added in 4.4', 'fictional-university' ),
+		'items_list'            => _x( 'Programs list', 'Screen reader text for the items list heading on the post type listing screen. Default “Posts list”/”Pages list”. Added in 4.4', 'fictional-university' ),
+	);
+
+	$program_args = array(
+		'labels'             => $program_labels,
+		'public'             => true,
+		'publicly_queryable' => true,
+		'show_ui'            => true,
+		'show_in_menu'       => true,
+		'query_var'          => true,
+		'rewrite'            => array( 'slug' => 'programs' ),
+		'capability_type'    => 'post',
+		'has_archive'        => true,
+		'hierarchical'       => false,
+		'menu_icon'          => 'dashicons-awards',
+		'supports'           => array( 'title', 'editor', 'author', 'thumbnail' ),
+	);
+	register_post_type( 'program', $program_args );
 }
 
 add_action( 'init', 'fictional_university_custom_post_type' );
@@ -93,7 +137,13 @@ function fictional_university_excerpt() {
 	}
 }
 
-function fictional_university_event_archive_set_query( $query ) {
+function fictional_university_archive_set_query( $query ) {
+
+	if ( ! is_admin() && is_post_type_archive( 'program' ) && $query->is_main_query() ) {
+		$query->set( 'posts_per_page', -1 );
+		$query->set( 'orderby', 'title' );
+		$query->set( 'order', 'ASC' );
+	}
 
 	if ( ! is_admin() && is_post_type_archive( 'event' ) && $query->is_main_query() ) {
 		$query->set( 'meta_key', 'event_date' );
@@ -113,4 +163,4 @@ function fictional_university_event_archive_set_query( $query ) {
 	}
 }
 
-add_action( 'pre_get_posts', 'fictional_university_event_archive_set_query' );
+add_action( 'pre_get_posts', 'fictional_university_archive_set_query' );
