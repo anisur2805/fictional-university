@@ -139,6 +139,24 @@ function fictional_university_custom_post_type() {
 			'supports'     => array( 'title', 'editor', 'author', 'thumbnail' ),
 		),
 	);
+
+	// Campus Custom Post Type
+	register_post_type(
+		'campus',
+		array(
+			'labels'       => array(
+				'name'          => 'Campus',
+				'singular_name' => 'Campus',
+			),
+			'public'       => true,
+			'show_in_rest' => true,
+			'has_archive'  => true,
+			'hierarchical' => false,
+			'hierarchical' => true,
+			'menu_icon'    => 'dashicons-location',
+			'supports'     => array( 'title', 'editor', 'author', 'thumbnail' ),
+		),
+	);
 }
 
 add_action( 'init', 'fictional_university_custom_post_type' );
