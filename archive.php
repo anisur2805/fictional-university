@@ -1,12 +1,13 @@
-<?php get_header(); ?>
+<?php get_header();
 
-<div class="page-banner">
-	<div class="page-banner__bg-image" style="background-image: url(<?php echo get_template_directory_uri(); ?>/images/library-hero.jpg)"></div>
-	<div class="page-banner__content container t-center c-white">
-	<h1 class="headline headline--large"><?php the_archive_title(); ?></h1>
-	<p class="headline headline--small"><?php the_archive_description(); ?></p>
-	</div>
-</div>
+fictional_university_page_banner(
+	array(
+		'title'    => get_the_archive_title(),
+		'subtitle' => get_the_archive_description(),
+	)
+);
+
+?>
 
 <div class="container container--narrow page-section">
 	<?php

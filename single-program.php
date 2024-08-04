@@ -1,16 +1,10 @@
 <?php get_header();
 
 while ( have_posts() ) {
-	the_post(); ?>
-<div class="page-banner">
-	<div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri(); ?>'/images/library.jpg' );"></div>    <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri(); ?>/images/ocean.jpg)"></div>
-	<div class="page-banner__content container container--narrow">
-	<h1 class="page-banner__title"><?php the_title(); ?></h1>
-	<div class="page-banner__intro">
-		<p>Learn how the school of your dreams got started.</p>
-	</div>
-	</div>
-</div>
+	the_post();
+
+	fictional_university_page_banner();
+	?>
 
 <div class="container container--narrow page-section">
 	<div class="metabox metabox--position-up metabox--with-home-link">
@@ -50,22 +44,7 @@ while ( have_posts() ) {
 		<?php
 		while ( $event_query->have_posts() ) :
 			$event_query->the_post();
-			?>
-			<div class="event-summary">
-				<a class="event-summary__date t-center" href="<?php the_permalink(); ?>">
-					<?php
-					$event_date = get_field( 'event_date' );
-					$date       = new DateTime( $event_date );
-					?>
-					<span class="event-summary__month"><?php echo $date->format( 'M' ); ?></span>
-					<span class="event-summary__day"><?php echo $date->format( 'd' ); ?></span>
-				</a>
-				<div class="event-summary__content">
-					<h5 class="event-summary__title headline headline--tiny"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
-					<p><?php fictional_university_excerpt(); ?> <a href="<?php the_permalink(); ?>" class="nu gray">Learn more</a></p>
-				</div>
-			</div>
-				<?php
+			get_template_part( 'template-parts/content-event' );
 		endwhile;
 		wp_reset_postdata();
 		endif;
@@ -88,12 +67,17 @@ while ( have_posts() ) {
 		?>
 		<hr class="section-break">
 		<h2 class="headline headline--small-plus"><?php echo get_the_title(); ?> Professor</h2>
-		<ul>
+		<ul class="professor-cards">
 		<?php
 		while ( $program_query->have_posts() ) :
 			$program_query->the_post();
 			?>
-			<li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
+			<li class="professor-card__list-item">
+				<a class="professor-card" href="<?php the_permalink(); ?>">
+					<img src="<?php the_post_thumbnail_url( 'professor-portrait' ); ?>" class="professor-card__image" alt="">
+					<span class="professor-card__name"><?php the_title(); ?></span>
+				</a>
+			</li>
 			<?php
 		endwhile;
 		wp_reset_postdata();

@@ -1,12 +1,12 @@
-<?php get_header(); ?>
+<?php get_header();
 
-<div class="page-banner">
-	<div class="page-banner__bg-image" style="background-image: url(<?php echo get_template_directory_uri(); ?>/images/library-hero.jpg)"></div>
-	<div class="page-banner__content container t-center c-white">
-	<h1 class="headline headline--large"><?php _e( 'Welcome to Our Blog', 'fictional-university' ); ?></h1>
-	<h3 class="headline headline--small"><?php _e( 'Keep up to date with the latest news', 'fictional-university' ); ?></h3>
-	</div>
-</div>
+fictional_university_page_banner(
+	array(
+		'title'    => 'Welcome to Our Blog',
+		'subtitle' => 'Keep up to date with the latest news',
+	)
+);
+?>
 
 <div class="container container--narrow page-section">
 	<?php
