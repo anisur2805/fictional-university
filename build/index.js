@@ -112,19 +112,45 @@ __webpack_require__.r(__webpack_exports__);
 
 class Search {
   constructor() {
-    this.openButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.js-search-trigger');
-    this.closeButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.search-overlay__close');
-    this.overlay = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.search-overlay');
+    this.openButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".js-search-trigger");
+    this.closeButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay__close");
+    this.overlay = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay");
+    this.searchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#search-term");
+    this.resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay__results");
     this.isOverlayOpen = false;
+    this.isSpinnerVisible = false;
+    this.typingTimer;
+    this.previousValue = "";
     this.events();
   }
   events() {
-    this.openButton.on('click', this.openOverlay.bind(this));
-    this.closeButton.on('click', this.closeOverlay.bind(this));
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('keydown', this.keyPressDispatcher.bind(this));
+    this.openButton.on("click", this.openOverlay.bind(this));
+    this.closeButton.on("click", this.closeOverlay.bind(this));
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on("keydown", this.keyPressDispatcher.bind(this));
+    this.searchField.on("keyup", this.typingLogin.bind(this));
+  }
+  typingLogin() {
+    if (this.searchField.val() != this.previousValue) {
+      clearTimeout(this.typingTimer);
+      if (this.searchField.val()) {
+        if (!this.isSpinnerVisible) {
+          this.resultDiv.html('<div class="spinner-loader"></div>');
+          this.isSpinnerVisible = true;
+        }
+        this.typingTimer = setTimeout(this.getResults.bind(this), 1300);
+      } else {
+        this.resultDiv.html("");
+        this.isSpinnerVisible = false;
+      }
+    }
+    this.previousValue = this.searchField.val();
+  }
+  getResults() {
+    this.resultDiv.html("Imagine a result");
+    this.isSpinnerVisible = false;
   }
   keyPressDispatcher(e) {
-    if (e.keyCode == 83 && !this.isOverlayOpen) {
+    if (e.keyCode == 83 && !this.isOverlayOpen && !jquery__WEBPACK_IMPORTED_MODULE_0___default()("input, textarea").is(":focus")) {
       this.openOverlay();
     }
     if (e.keyCode == 27 && this.isOverlayOpen) {
@@ -132,13 +158,13 @@ class Search {
     }
   }
   openOverlay() {
-    this.overlay.addClass('search-overlay--active');
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').addClass('body-no-scroll');
+    this.overlay.addClass("search-overlay--active");
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").addClass("body-no-scroll");
     this.isOverlayOpen = true;
   }
   closeOverlay() {
-    this.overlay.removeClass('search-overlay--active');
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').removeClass('body-no-scroll');
+    this.overlay.removeClass("search-overlay--active");
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").removeClass("body-no-scroll");
     this.isOverlayOpen = false;
   }
 }
