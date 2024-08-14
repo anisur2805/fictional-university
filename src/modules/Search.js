@@ -6,7 +6,7 @@ class Search {
         this.closeButton = $(".search-overlay__close");
         this.overlay = $(".search-overlay");
         this.searchField = $("#search-term");
-        this.resultDiv = $(".search-overlay__results");
+        this.resultDiv = $(".search-overlay__results .container");
         this.isOverlayOpen = false;
         this.isSpinnerVisible = false;
         this.typingTimer;
@@ -41,8 +41,28 @@ class Search {
     }
 
     getResults() {
-        this.resultDiv.html("Imagine a result");
-        this.isSpinnerVisible = false;
+        $.when(
+            $.getJSON(globalObj.rest_url + 'wp/v2/posts?search=' + this.searchField.val()),
+            $.getJSON(globalObj.rest_url + 'wp/v2/pages?search=' + this.searchField.val())
+        ).done((postsResponse, pagesResponse) => {
+            const posts = postsResponse[0];
+            const pages = pagesResponse[0];
+            const postsAndPages = posts.concat(pages);
+        
+            console.log('postsAndPages: ', postsAndPages);
+        
+            this.resultDiv.html(`
+                <h2 class="search-overlay__section-title">General Information</h2>
+                ${postsAndPages.length ? '<ul class="link-list min-list">' : `<p>No results for ${this.searchField.val()}</p>`}
+                    ${postsAndPages.map(item => `<li><a href="${item.link}">${item.title.rendered}</a>${item.author_name ? ` by ${item.author_name}` : ""}</li>`).join('')}
+                ${postsAndPages.length ? '</ul>' : ''}
+            `);
+        }).fail((jqXHR, textStatus, errorThrown) => {
+            console.error('An error occurred:', textStatus, errorThrown);
+            this.resultDiv.html('<p>There was an error processing your request. Please try again later.</p>');
+        }).always(() => {
+            this.isSpinnerVisible = false;
+        });        
     }
 
     keyPressDispatcher(e) {
@@ -58,6 +78,8 @@ class Search {
     openOverlay() {
         this.overlay.addClass("search-overlay--active");
         $("body").addClass("body-no-scroll");
+        this.searchField.val("");
+        setTimeout(() => this.searchField.focus(), 301);
         this.isOverlayOpen = true;
     }
 

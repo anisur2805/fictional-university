@@ -116,7 +116,7 @@ class Search {
     this.closeButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay__close");
     this.overlay = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay");
     this.searchField = jquery__WEBPACK_IMPORTED_MODULE_0___default()("#search-term");
-    this.resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay__results");
+    this.resultDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()(".search-overlay__results .container");
     this.isOverlayOpen = false;
     this.isSpinnerVisible = false;
     this.typingTimer;
@@ -146,8 +146,23 @@ class Search {
     this.previousValue = this.searchField.val();
   }
   getResults() {
-    this.resultDiv.html("Imagine a result");
-    this.isSpinnerVisible = false;
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().when(jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(globalObj.rest_url + 'wp/v2/posts?search=' + this.searchField.val()), jquery__WEBPACK_IMPORTED_MODULE_0___default().getJSON(globalObj.rest_url + 'wp/v2/pages?search=' + this.searchField.val())).done((postsResponse, pagesResponse) => {
+      const posts = postsResponse[0];
+      const pages = pagesResponse[0];
+      const postsAndPages = posts.concat(pages);
+      console.log('postsAndPages: ', postsAndPages);
+      this.resultDiv.html(`
+                <h2 class="search-overlay__section-title">General Information</h2>
+                ${postsAndPages.length ? '<ul class="link-list min-list">' : `<p>No results for ${this.searchField.val()}</p>`}
+                    ${postsAndPages.map(item => `<li><a href="${item.link}">${item.title.rendered}</a>${item.author_name ? ` by ${item.author_name}` : ""}</li>`).join('')}
+                ${postsAndPages.length ? '</ul>' : ''}
+            `);
+    }).fail((jqXHR, textStatus, errorThrown) => {
+      console.error('An error occurred:', textStatus, errorThrown);
+      this.resultDiv.html('<p>There was an error processing your request. Please try again later.</p>');
+    }).always(() => {
+      this.isSpinnerVisible = false;
+    });
   }
   keyPressDispatcher(e) {
     if (e.keyCode == 83 && !this.isOverlayOpen && !jquery__WEBPACK_IMPORTED_MODULE_0___default()("input, textarea").is(":focus")) {
@@ -160,6 +175,8 @@ class Search {
   openOverlay() {
     this.overlay.addClass("search-overlay--active");
     jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").addClass("body-no-scroll");
+    this.searchField.val("");
+    setTimeout(() => this.searchField.focus(), 301);
     this.isOverlayOpen = true;
   }
   closeOverlay() {
