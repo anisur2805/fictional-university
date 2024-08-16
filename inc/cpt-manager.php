@@ -46,7 +46,7 @@ function fictional_university_custom_post_type() {
 		'has_archive'        => true,
 		'hierarchical'       => false,
 		'menu_icon'          => 'dashicons-calendar',
-		'supports'           => array( 'title', 'editor', 'author', 'thumbnail', 'excerpt', 'comments' ),
+		'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'comments' ),
 	);
 
 	register_post_type( 'event', $args );
@@ -92,7 +92,7 @@ function fictional_university_custom_post_type() {
 		'has_archive'        => true,
 		'hierarchical'       => false,
 		'menu_icon'          => 'dashicons-awards',
-		'supports'           => array( 'title', 'editor', 'author', 'thumbnail' ),
+		'supports'           => array( 'title', 'author', 'thumbnail' ),
 	);
 	register_post_type( 'program', $program_args );
 
@@ -108,7 +108,7 @@ function fictional_university_custom_post_type() {
 			'show_in_rest' => true,
 			'hierarchical' => true,
 			'menu_icon'    => 'dashicons-welcome-learn-more',
-			'supports'     => array( 'title', 'editor', 'author', 'thumbnail' ),
+			'supports'     => array( 'title', 'author', 'thumbnail' ),
 		),
 	);
 
@@ -127,7 +127,7 @@ function fictional_university_custom_post_type() {
 			'show_in_rest' => true,
 			'hierarchical' => true,
 			'menu_icon'    => 'dashicons-location',
-			'supports'     => array( 'title', 'editor', 'author', 'thumbnail' ),
+			'supports'     => array( 'title', 'author', 'thumbnail' ),
 		),
 	);
 }
