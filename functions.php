@@ -90,15 +90,21 @@ add_action( 'pre_get_posts', 'fictional_university_archive_set_query' );
  * @return void
  */
 function fictional_university_page_banner( $args = null ) {
-	if ( ! $args['title'] ) {
+	// Ensure $args is an array
+	$args = (array) $args;
+
+	// Check if 'title' is set, otherwise use the post title
+	if ( ! isset( $args['title'] ) || ! $args['title'] ) {
 		$args['title'] = get_the_title();
 	}
 
-	if ( ! $args['subtitle'] ) {
+	// Check if 'subtitle' is set, otherwise use the custom field value
+	if ( ! isset( $args['subtitle'] ) || ! $args['subtitle'] ) {
 		$args['subtitle'] = get_field( 'banenr_subheading' );
 	}
 
-	if ( ! $args['photo'] ) {
+	// Check if 'photo' is set or use default image
+	if ( ! isset( $args['photo'] ) || ! $args['photo'] ) {
 		if ( get_field( 'banner_bg' ) ) {
 			$args['photo'] = get_field( 'banner_bg' )['sizes']['banner-image'];
 		} else {
@@ -107,12 +113,12 @@ function fictional_university_page_banner( $args = null ) {
 	}
 	?>
 	<div class="page-banner">
-		<div class="page-banner__bg-image" style="background-image: url( <?php echo $args['photo']; ?> )"></div>
+		<div class="page-banner__bg-image" style="background-image: url( <?php echo esc_url( $args['photo'] ); ?> )"></div>
 		<div class="page-banner__content container container--narrow">
-		<h1 class="page-banner__title"><?php echo $args['title']; ?></h1>
-		<div class="page-banner__intro">
-			<p><?php echo $args['subtitle']; ?></p>
-		</div>
+			<h1 class="page-banner__title"><?php echo $args['title']; ?></h1>
+			<div class="page-banner__intro">
+				<p><?php echo esc_html( $args['subtitle'] ); ?></p>
+			</div>
 		</div>
 	</div>
 	<?php
