@@ -19,7 +19,7 @@ while ( have_posts() ) {
 				<img src="<?php the_post_thumbnail_url( 'professor-portrait' ); ?>" alt="">
 			</div>
 			<div class="two-thirds">
-				<?php the_content(); ?>
+				<?php the_field( 'main_body_content' ); ?>
 			</div>
 		</div>
 	</div>
