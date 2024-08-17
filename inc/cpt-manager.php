@@ -46,6 +46,8 @@ function fictional_university_custom_post_type() {
 		'has_archive'        => true,
 		'hierarchical'       => false,
 		'menu_icon'          => 'dashicons-calendar',
+		'capability_type'    => 'event',
+		'map_meta_cap'       => true,
 		'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'comments' ),
 	);
 
@@ -116,18 +118,20 @@ function fictional_university_custom_post_type() {
 	register_post_type(
 		'campus',
 		array(
-			'labels'       => array(
+			'labels'          => array(
 				'name'          => 'Campus',
 				'singular_name' => 'Campus',
 			),
-			'public'       => true,
-			'show_in_rest' => true,
-			'has_archive'  => true,
-			'hierarchical' => false,
-			'show_in_rest' => true,
-			'hierarchical' => true,
-			'menu_icon'    => 'dashicons-location',
-			'supports'     => array( 'title', 'author', 'thumbnail' ),
+			'public'          => true,
+			'show_in_rest'    => true,
+			'has_archive'     => true,
+			'hierarchical'    => false,
+			'show_in_rest'    => true,
+			'hierarchical'    => true,
+			'menu_icon'       => 'dashicons-location',
+			'capability_type' => 'campus',
+			'map_meta_cap'    => true,
+			'supports'        => array( 'title', 'author', 'thumbnail' ),
 		),
 	);
 }
