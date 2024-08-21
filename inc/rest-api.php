@@ -9,6 +9,17 @@ function fu_rest_api_init() {
 			'get_callback' => 'fu_get_author_name',
 		)
 	);
+
+	register_rest_field(
+		'note',
+		'user_posts_count',
+		array(
+			'get_callback' => function () {
+				return count_user_posts( get_current_user_id(), 'note' );
+			},
+		)
+	);
+
 	register_rest_route(
 		'university/v1',
 		'search',
