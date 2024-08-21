@@ -17,6 +17,7 @@ function fictional_university_assets() {
 		array(
 			'root_url' => get_site_url(),
 			'rest_url' => esc_url_raw( rest_url() ),
+			'nonce'    => wp_create_nonce( 'wp_rest' ),
 		)
 	);
 }
@@ -164,4 +165,27 @@ function fu_custom_login_logo_title() {
 add_filter( 'login_headerurl', 'fu_custom_login_logo_url' );
 function fu_custom_login_logo_url() {
 	return esc_url( home_url( '/' ) );
+}
+
+// Force to make post status private
+add_filter( 'wp_insert_post_data', 'fu_force_private_post_status', 10, 2 );
+function fu_force_private_post_status( $data, $postarr ) {
+	if ( isset( $data['post_type'] ) && 'note' === $data['post_type'] ) {
+		if ( count_user_posts( get_current_user_id(), 'note' ) > 4 && ! $postarr['ID'] ) {
+			die( 'You have reached your note limit' );
+		}
+	}
+
+	if ( isset( $data['post_type'] ) && 'note' === $data['post_type'] ) {
+		$data['post_title']   = sanitize_text_field( $data['post_title'] );
+		$data['post_content'] = sanitize_textarea_field( $data['post_content'] );
+	}
+
+	if ( isset( $data['post_type'] ) && 'note' === $data['post_type'] ) {
+		if ( 'trash' !== $data['post_status'] ) {
+			$data['post_status'] = 'private';
+		}
+	}
+
+	return $data;
 }
