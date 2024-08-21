@@ -19,6 +19,56 @@ while ( have_posts() ) {
 				<img src="<?php the_post_thumbnail_url( 'professor-portrait' ); ?>" alt="">
 			</div>
 			<div class="two-thirds">
+				<?php
+				$liked_query = new WP_Query(
+					array(
+						'post_type'   => 'like',
+						'post_status' => 'publish',
+						'meta_query'  => array(
+							array(
+								'key'     => 'liked_professor_id',
+								'compare' => '=',
+								'value'   => get_the_ID(),
+							),
+						),
+					)
+				);
+
+				$liked_current_user = 'no';
+
+				if ( is_user_logged_in() ) {
+					$liked_user_query = new WP_Query(
+						array(
+							'post_type'   => 'like',
+							'post_status' => 'publish',
+							'author'      => get_current_user_id(),
+							'meta_query'  => array(
+								array(
+									'key'     => 'liked_professor_id',
+									'compare' => '=',
+									'value'   => get_the_ID(),
+								),
+							),
+						)
+					);
+
+					if ( $liked_user_query->found_posts > 0 ) {
+						$liked_current_user = 'yes';
+					}
+				}
+
+				if ( isset( $liked_user_query->posts[0] ) && ! empty( $liked_user_query->posts[0]->ID ) ) {
+					$like_id = $liked_user_query->posts[0]->ID;
+				} else {
+					$like_id = '';
+				}
+
+				?>
+				<div class="like-box" data-like="<?php echo esc_attr( $like_id ); ?>" data-title="<?php echo get_the_title(); ?>" data-professor="<?php the_ID(); ?>" data-exists="<?php echo $liked_current_user; ?>">
+					<span><i class="fa fa-heart-o" aria-hidden="true"></i></span>
+					<span><i class="fa fa-heart" aria-hidden="true"></i></span>
+					<span class="like-count"><?php echo $liked_query->found_posts; ?></span>
+				</div>
 				<?php the_field( 'main_body_content' ); ?>
 			</div>
 		</div>

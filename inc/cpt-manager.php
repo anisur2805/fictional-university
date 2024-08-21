@@ -156,6 +156,25 @@ function fictional_university_custom_post_type() {
 			'supports'        => array( 'title', 'author', 'editor' ),
 		),
 	);
+
+	// Like Custom Post Type
+	register_post_type(
+		'like',
+		array(
+			'labels'       => array(
+				'name'          => 'Like',
+				'singular_name' => 'Like',
+			),
+			'public'       => false,
+			'show_ui'      => true,
+			'show_in_menu' => true,
+			'has_archive'  => true,
+			'hierarchical' => false,
+			'hierarchical' => true,
+			'menu_icon'    => 'dashicons-heart',
+			'supports'     => array( 'title' ),
+		),
+	);
 }
 
 add_action( 'init', 'fictional_university_custom_post_type' );
