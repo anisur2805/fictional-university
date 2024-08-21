@@ -134,6 +134,28 @@ function fictional_university_custom_post_type() {
 			'supports'        => array( 'title', 'author', 'thumbnail' ),
 		),
 	);
+
+	// Note Custom Post Type
+	register_post_type(
+		'note',
+		array(
+			'labels'          => array(
+				'name'          => 'Note',
+				'singular_name' => 'Notes',
+			),
+			'public'          => false,
+			'show_in_rest'    => true,
+			'show_ui'         => true,
+			'show_in_menu'    => true,
+			'has_archive'     => true,
+			'hierarchical'    => false,
+			'hierarchical'    => true,
+			'menu_icon'       => 'dashicons-welcome-write-blog',
+			'capability_type' => 'note',
+			'map_meta_cap'    => true,
+			'supports'        => array( 'title', 'author', 'editor' ),
+		),
+	);
 }
 
 add_action( 'init', 'fictional_university_custom_post_type' );
